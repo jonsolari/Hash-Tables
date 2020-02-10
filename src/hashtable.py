@@ -1,6 +1,3 @@
-# '''
-# Linked List hash table key/value pair
-# '''
 class LinkedPair:
     def __init__(self, key, value):
         self.key = key
@@ -8,21 +5,14 @@ class LinkedPair:
         self.next = None
 
 class HashTable:
-    '''
-    A hash table that with `capacity` buckets
-    that accepts string keys
-    '''
+
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
 
 
     def _hash(self, key):
-        '''
-        Hash an arbitrary key and return an integer.
 
-        You may replace the Python hash with DJB2 as a stretch goal.
-        '''
         total = 0
 
         for i in key:
@@ -33,20 +23,8 @@ class HashTable:
         return total
 
 
-    # def _hash_djb2(self, key):
-    #     '''
-    #     Hash an arbitrary key using DJB2 hash
-
-    #     OPTIONAL STRETCH: Research and implement DJB2
-    #     '''
-    #     pass
-
-
     def _hash_mod(self, key):
-        '''
-        Take an arbitrary key and return a valid integer index
-        within the storage capacity of the hash table.
-        '''
+        
         total = 0
 
         for i in key:
@@ -58,17 +36,18 @@ class HashTable:
 
 
     def insert(self, key, value):
-        '''
-        Store the value with the given key.
 
-        Hash collisions should be handled with Linked List Chaining.
-
-        Fill this in.
-        '''
-        if self._hash_mod(key) not in self.storage:
-            self.storage[self._hash_mod(key)] = value
-        else: 
+        current = None
+        
+        if self.storage[self._hash_mod(key)] == None:
+            self.storage[self._hash_mod(key)] = LinkedPair(key, value)
+        elif self.storage[self._hash_mod(key)].next == None:
             self.storage[self._hash_mod(key)].next = LinkedPair(key, value)
+        else:
+            while self.storage[self._hash_mod(key)].next != None:
+                
+                current = self.storage[self._hash_mod(key)].next
+                current.insert(key, value)
 
 
 
@@ -80,7 +59,16 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        current = None
+
+        if self.storage[self._hash_mod(key)] != None:
+            if self.storage[self._hash_mod(key)].key == key:
+                self.storage[self._hash_mod(key)].value = None
+            elif self.storage[self._hash_mod(key)].next != None:
+                current = self.storage[self._hash_mod(key)].next
+                current.remove(key)
+        else:
+            print("Key not found.")
 
 
     def retrieve(self, key):
@@ -132,3 +120,5 @@ if __name__ == "__main__":
     print(ht.retrieve("line_3"))
 
     print("")
+
+    
