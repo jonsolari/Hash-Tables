@@ -23,16 +23,23 @@ class HashTable:
 
         You may replace the Python hash with DJB2 as a stretch goal.
         '''
-        return hash(key)
+        total = 0
+
+        for i in key:
+            total += ord(i)
+
+        total = total 
+
+        return total
 
 
-    def _hash_djb2(self, key):
-        '''
-        Hash an arbitrary key using DJB2 hash
+    # def _hash_djb2(self, key):
+    #     '''
+    #     Hash an arbitrary key using DJB2 hash
 
-        OPTIONAL STRETCH: Research and implement DJB2
-        '''
-        pass
+    #     OPTIONAL STRETCH: Research and implement DJB2
+    #     '''
+    #     pass
 
 
     def _hash_mod(self, key):
@@ -40,7 +47,14 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         within the storage capacity of the hash table.
         '''
-        return self._hash(key) % self.capacity
+        total = 0
+
+        for i in key:
+            total += ord(i)
+
+        total = total 
+
+        return total % self.capacity
 
 
     def insert(self, key, value):
@@ -51,7 +65,10 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        if self._hash_mod(key) not in self.storage:
+            self.storage[self._hash_mod(key)] = value
+        else: 
+            self.storage[self._hash_mod(key)].next = LinkedPair(key, value)
 
 
 
