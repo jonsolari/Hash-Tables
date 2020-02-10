@@ -18,8 +18,6 @@ class HashTable:
         for i in key:
             total += ord(i)
 
-        total = total 
-
         return total
 
 
