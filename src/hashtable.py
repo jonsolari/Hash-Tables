@@ -111,10 +111,11 @@ class HashTable:
         self.storage = [None] * self.capacity
 
         for item in old_storage:
-            if item is not None:
+            if item.key is not None:
                 self.insert(item.key, item.value)
             else:
-                pass
+                return
+            
             
 
 
