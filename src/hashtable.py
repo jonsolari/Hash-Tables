@@ -1,6 +1,3 @@
-# '''
-# Linked List hash table key/value pair
-# '''
 class LinkedPair:
     def __init__(self, key, value):
         self.key = key
@@ -8,83 +5,116 @@ class LinkedPair:
         self.next = None
 
 class HashTable:
-    '''
-    A hash table that with `capacity` buckets
-    that accepts string keys
-    '''
+
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
 
 
     def _hash(self, key):
-        '''
-        Hash an arbitrary key and return an integer.
 
-        You may replace the Python hash with DJB2 as a stretch goal.
-        '''
         return hash(key)
 
 
-    def _hash_djb2(self, key):
-        '''
-        Hash an arbitrary key using DJB2 hash
-
-        OPTIONAL STRETCH: Research and implement DJB2
-        '''
-        pass
-
-
     def _hash_mod(self, key):
-        '''
-        Take an arbitrary key and return a valid integer index
-        within the storage capacity of the hash table.
-        '''
+            
         return self._hash(key) % self.capacity
 
 
     def insert(self, key, value):
-        '''
-        Store the value with the given key.
 
-        Hash collisions should be handled with Linked List Chaining.
+        index = self._hash_mod(key)
+        current = self.storage[index]
 
-        Fill this in.
-        '''
-        pass
+        if current != None:
+            if current.next == None:
+                current.next = LinkedPair(key, value)
+            else: 
+                while current.next != None:
+                    current = current.next
+                current.next = LinkedPair(key, value)
+                
+        else:
+            self.storage[index] = LinkedPair(key, value)
+
+        return
+
+
+
+        # if self.storage[index] == None:
+        #     self.storage[index] = LinkedPair(key, value)
+        # elif self.storage[index].next == None:
+        #     self.storage[index].next = LinkedPair(key, value)
+        # else:
+        #     while self.storage[index].next != None:
+                
+        #         current = self.storage[index].next
+        #         current.insert(key, value)
 
 
 
     def remove(self, key):
-        '''
-        Remove the value stored with the given key.
+        
+        index = self._hash_mod(key)
+        current = self.storage[index]
 
-        Print a warning if the key is not found.
+        if current != None:
+            if current == key:
+                current = None
+            else:
+                while current.next is not None and current.next.key is not key and current.next is not None:
+                    current = current.next
+                if current.next is not None and current.next.next is not None:
+                    current.next = current.next.next
+                else:
+                    current = None
+        else:
+            print(f"Warning key {key} not found")
 
-        Fill this in.
-        '''
-        pass
+        return
+
+        # current = None
+
+        # if self.storage[self._hash_mod(key)] != None:
+        #     if self.storage[self._hash_mod(key)].key == key:
+        #         self.storage[self._hash_mod(key)].value = None
+        #     elif self.storage[self._hash_mod(key)].next != None:
+        #         current = self.storage[self._hash_mod(key)].next
+        #         current.remove(key)
+        # else:
+        #     print("Key not found.")
 
 
     def retrieve(self, key):
-        '''
-        Retrieve the value stored with the given key.
+        
+        index = self._hash_mod(key)
+        current = self.storage[index]
 
-        Returns None if the key is not found.
+        if current != None:
+            if current.key == key:
+                return current.value
+            else:
+                while current.key is not key and current.next is not None:
+                    current = current.next
+                return current.value
+        else:
+            return None
 
-        Fill this in.
-        '''
-        pass
+        
 
 
     def resize(self):
-        '''
-        Doubles the capacity of the hash table and
-        rehash all key/value pairs.
+        
+        old_storage = self.storage
+        self.capacity *= 2
+        self.storage = [None] * self.capacity
 
-        Fill this in.
-        '''
-        pass
+        for item in old_storage:
+            if item is not None:
+                self.insert(item.key, item.value)
+            
+            
+            
 
 
 
@@ -115,3 +145,5 @@ if __name__ == "__main__":
     print(ht.retrieve("line_3"))
 
     print("")
+
+    
