@@ -13,20 +13,16 @@ class HashTable:
 
     def _hash(self, key):
 
-      
-
         return hash(key)
 
 
     def _hash_mod(self, key):
-        
-        
+            
         return self._hash(key) % self.capacity
 
 
     def insert(self, key, value):
 
-        
         index = self._hash_mod(key)
         current = self.storage[index]
 
@@ -66,9 +62,12 @@ class HashTable:
             if current == key:
                 current = None
             else:
-                while current.key is not key and current.next is not None:
+                while current.next is not None and current.next.key is not key and current.next is not None:
                     current = current.next
-                current = None
+                if current.next is not None and current.next.next is not None:
+                    current.next = current.next.next
+                else:
+                    current = None
         else:
             print(f"Warning key {key} not found")
 
@@ -111,10 +110,9 @@ class HashTable:
         self.storage = [None] * self.capacity
 
         for item in old_storage:
-            if item.key is not None:
+            if item is not None:
                 self.insert(item.key, item.value)
-            else:
-                return
+            
             
             
 
