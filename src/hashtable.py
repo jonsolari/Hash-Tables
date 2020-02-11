@@ -26,14 +26,18 @@ class HashTable:
 
     def insert(self, key, value):
 
-        current = None
+        
         index = self._hash_mod(key)
+        current = self.storage[index]
 
-        if self.storage[index] != None:
-            if self.storage[index].next == None:
-                self.storage[index].next = LinkedPair(key, value)
+        if current != None:
+            if current.next == None:
+                current.next = LinkedPair(key, value)
             else: 
-                self.insert(self.storage[index].next)
+                while current.next != None:
+                    current = current.next
+                current.next = LinkedPair(key, value)
+                
         else:
             self.storage[index] = LinkedPair(key, value)
 
@@ -54,20 +58,17 @@ class HashTable:
 
 
     def remove(self, key):
-        '''
-        Remove the value stored with the given key.
-
-        Print a warning if the key is not found.
-
-        Fill this in.
-        '''
+        
         index = self._hash_mod(key)
+        current = self.storage[index]
 
-        if self.storage[index] != None:
-            if self.storage[index].key == key:
-                self.storage[index] = None
+        if current != None:
+            if current == key:
+                current = None
             else:
-                print(f"Collision at {index}")
+                while current.key is not key and current.next is not None:
+                    current = current.next
+                current = None
         else:
             print(f"Warning key {key} not found")
 
@@ -86,39 +87,35 @@ class HashTable:
 
 
     def retrieve(self, key):
-        '''
-        Retrieve the value stored with the given key.
-
-        Returns None if the key is not found.
-
-        Fill this in.
-        '''
+        
         index = self._hash_mod(key)
+        current = self.storage[index]
 
-        if self.storage[index] != None:
-            if self.storage[index].key == key:
-                return self.storage[index].value
+        if current != None:
+            if current.key == key:
+                return current.value
             else:
-                print(f"Collision at {index}")
+                while current.key is not key and current.next is not None:
+                    current = current.next
+                return current.value
         else:
             return None
 
-        return
+        
 
 
     def resize(self):
-        '''
-        Doubles the capacity of the hash table and
-        rehash all key/value pairs.
-
-        Fill this in.
-        '''
+        
         old_storage = self.storage
         self.capacity *= 2
         self.storage = [None] * self.capacity
 
         for item in old_storage:
-            self.insert(item.key, item.value)
+            if item is not None:
+                self.insert(item.key, item.value)
+            else:
+                pass
+            
 
 
 
